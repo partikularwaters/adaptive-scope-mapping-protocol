@@ -67,17 +67,21 @@ scripts/             Integrity checks
 
 See [`examples/`](examples/) for software, service, non-software, and fit-gate redirection illustrations.
 
-## Optional downstream workflows
+## Receiving workflows and optional integrations
 
-After **`IDEA-SCOPE.md`** is complete, you may hand it to **any suitable receiving process** — internal engineering, vendor SOW, research plan, design brief, operations runbook, grant application, and so on. ASMP does not select a receiver by default.
+After **`IDEA-SCOPE.md`** is complete, hand it to the discipline or workflow responsible for the next stage. Depending on the scope, that may be research or validation, design, technical architecture or engineering, project or program planning, procurement or vendor selection, operations or service management, governance or specialist review, implementation, launch, migration, or retirement.
 
-For **coding-agent software projects**, **Banka** is one recommended companion: a new project may continue with Banka using the scope as origin input.
+ASMP does not prescribe a specific downstream framework or tool. The receiving workflow may be an organization's existing process, a specialist methodology, a project-management system, another AI-assisted protocol, or a purpose-built framework.
 
-For **existing software codebases**, Banka Adoption may precede Banka when retrofitting an established repository.
+### Optional Banka integration
 
-Those paths are **optional companions**, not ASMP dependencies or universal defaults. ASMP is complete without them.
+For software projects that use [**Banka**](https://github.com/partikularwaters/Banka) as the receiving development framework, ASMP can provide the completed scope as origin input.
 
-If you explicitly want a Banka-ready compatibility pass after scope completion, see [`optional-adapters/banka-handoff.md`](optional-adapters/banka-handoff.md). That adapter runs only on request, requires the current external Banka protocol, and does not modify the canonical scope.
+For an existing software codebase that will be brought under Banka, the **Banka Adoption Protocol** may be used to prepare the existing project before Banka is adopted.
+
+If you explicitly want a Banka-ready compatibility pass after ASMP is complete, see [`optional-adapters/banka-handoff.md`](optional-adapters/banka-handoff.md). The adapter is opt-in, requires the current external Banka protocol, and does not modify the canonical scope.
+
+These integrations are optional. **ASMP is complete without Banka or any other downstream framework.**
 
 ## Versioning, contribution, and license
 
