@@ -15,7 +15,6 @@ Initial public-ready standalone repository structure.
 - Output templates synchronized with protocol Section 7 (Compact) and Section 10.6 (Comprehensive)
 - Examples: compact software widget, comprehensive public-health service, non-software community event, fit-gate redirection narratives
 - `optional-adapters/banka-handoff.md` — explicit opt-in Banka compatibility pass (no embedded Banka rubric)
-- `tools/ollama-planner/` — optional local Ollama assistant (audited for first release)
 - `scripts/check-repo-integrity.sh` — deterministic repository checks
 
 ### Changed from source material

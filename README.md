@@ -42,8 +42,6 @@ Both protocols include a **Fit and Redirection Gate**. If the chosen protocol is
 5. Review the resulting **`IDEA-SCOPE.md`**. Approve it or request corrections.
 6. Hand off to the receiving discipline or workflow named in the document.
 
-**Optional tool:** [`tools/ollama-planner/`](tools/ollama-planner/) runs Compact or Comprehensive locally via Ollama. Plain Markdown remains canonical.
-
 Templates in [`templates/`](templates/) mirror the protocol output contracts and introduce no extra requirements.
 
 ## What `IDEA-SCOPE.md` contains
@@ -61,7 +59,6 @@ protocols/           Canonical ASMP Compact and Comprehensive protocols
 templates/           Output templates synchronized with the protocols
 examples/            Sanitized, non-authoritative completed scopes
 optional-adapters/   Explicit opt-in compatibility passes (not part of normal ASMP)
-tools/ollama-planner Optional local planning assistant
 scripts/             Integrity checks
 ```
 
@@ -86,7 +83,7 @@ These integrations are optional. **ASMP is complete without Banka or any other d
 ## Versioning, contribution, and license
 
 - **Versioning:** Compact and Comprehensive share this repository's release version (`v0.1.0-draft` initially). See [`CHANGELOG.md`](CHANGELOG.md).
-- **Canonical authority:** Markdown files in `protocols/` override templates, examples, tools, and any PDF release attachment.
+- **Canonical authority:** Markdown files in `protocols/` override templates, examples, optional adapters, and any PDF release attachment.
 - **PDF policy:** PDFs are release attachments only, generated from Markdown — not independently edited authorities. Render command documented in [`CHANGELOG.md`](CHANGELOG.md).
 - **Contributing:** See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 - **License:** [MIT](LICENSE)
