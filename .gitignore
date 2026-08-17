@@ -1,0 +1,6 @@
+.DS_Store
+*.pyc
+__pycache__/
+.venv/
+tools/ollama-planner/.venv/
+*.pdf
