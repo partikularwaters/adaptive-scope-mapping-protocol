@@ -1,5 +1,11 @@
+# OS cruft
 .DS_Store
+Thumbs.db
+
+# Generated documents
+*.pdf
+
+# Python cache and local envs
 *.pyc
 __pycache__/
 .venv/
-*.pdf
