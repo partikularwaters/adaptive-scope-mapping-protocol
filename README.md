@@ -74,7 +74,7 @@ ASMP does not prescribe a specific downstream framework or tool. The receiving w
 
 For software projects that use [**Banka**](https://github.com/partikularwaters/Banka) as the receiving development framework, ASMP can provide the completed decision-ready scope artifact as origin input.
 
-For an existing software codebase that will enter, the **Banka Adoption Protocol** may be used to prepare the project before Banka adoption.
+For an existing software codebase that will enter Banka, the **Banka Adoption Protocol** may be used to prepare the project before Banka adoption.
 
 If you explicitly want a Banka-ready compatibility pass after ASMP is complete, see [`optional-adapters/banka-handoff.md`](optional-adapters/banka-handoff.md). The adapter is opt-in, requires the current external Banka protocol, and does not modify the canonical scope.
 
