@@ -1,6 +1,6 @@
 # Scope Map — [Initiative Name]
 
-> **Synchronized with:** `protocols/ASMP-Comprehensive.md` Section 10.6 (protocol version v0.1.0-draft — 2026-08-17)
+> **Synchronized with:** `protocols/ASMP-Comprehensive.md` Section 10.6 (protocol version v0.2.0-draft — 2026-09-05)
 >
 > This template extracts the Comprehensive output contract. It introduces no requirements beyond the canonical protocol.
 
@@ -10,6 +10,7 @@
 - Supersedes:
 - Superseded by:
 - Scoping mechanism: ASMP Comprehensive / redirected with approval
+- Operating surface: Durable / Degraded-Artifact / Degraded-Packet
 - Primary direction: New / Evolving / Replacing / Investigating / Recovering / Retiring
 - Work shape: [primary and any secondary lenses]
 - Scope owner:
