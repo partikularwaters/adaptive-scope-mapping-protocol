@@ -39,7 +39,7 @@ for f in "${required_files[@]}"; do
 done
 
 # --- Shared version consistency ---
-expected_version="v0.1.0-draft"
+expected_version="v0.2.0-draft"
 compact_version=$(sed -n 's/^\*\*Protocol version:\*\* \([^ ]*\).*/\1/p' protocols/ASMP-Compact.md | head -n1)
 comp_version=$(sed -n 's/^\*\*Protocol version:\*\* \([^ ]*\).*/\1/p' protocols/ASMP-Comprehensive.md | head -n1)
 compact_template_version=$(sed -n 's/.*(protocol version \([^ ]*\) .*/\1/p' templates/compact-scope-template.md | head -n1)
@@ -111,7 +111,7 @@ done
 # --- Template structural marker spot-checks ---
 compact_sections=(
   "## 0. Document Control"
-  "## 8. Handoff"
+  "## 4. Open Items and Handoff"
 )
 for s in "${compact_sections[@]}"; do
   if grep -qF "$s" templates/compact-scope-template.md; then
@@ -133,6 +133,19 @@ for s in "${comp_sections[@]}"; do
     fail "comprehensive template missing: $s"
   fi
 done
+
+# --- Operating Surface field presence (Comprehensive only; Compact has no field to check) ---
+if grep -qF "Operating surface:" templates/comprehensive-scope-template.md; then
+  pass "comprehensive template declares Operating surface field"
+else
+  fail "comprehensive template missing Operating surface field"
+fi
+
+if grep -qF "Operating surface:" protocols/ASMP-Comprehensive.md; then
+  pass "ASMP-Comprehensive.md declares Operating surface field"
+else
+  fail "ASMP-Comprehensive.md missing Operating surface field"
+fi
 
 # --- Example placeholder hygiene ---
 placeholder_pattern='\[(Initiative Name|TBD|TODO|FIXME|INSERT)\]'

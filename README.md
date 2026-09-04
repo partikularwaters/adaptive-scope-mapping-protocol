@@ -6,7 +6,7 @@ ASMP helps you scope new, evolving, replacing, investigative, recovering, or ret
 
 ASMP is **standalone**. It does not require any downstream framework to produce a complete, decision-ready scope artifact.
 
-**Current version:** v0.1.0-draft (2026-08-17)
+**Current version:** v0.2.0-draft (2026-09-05)
 
 ---
 
@@ -27,11 +27,13 @@ The result is not a build plan or a pitch deck. It is a durable scope artifact h
 
 | Situation | Recommended approach |
 | --- | --- |
-| One primary outcome, one accountable owner, low reversal cost, few dependencies | **ASMP Compact** |
-| Material consequence, uncertainty, interdependence, stakeholder diversity, lifecycle burden, or evidence burden | **ASMP Comprehensive** |
+| One deliverable, one owner who is also the decision-maker, a delivery path of hours to a few days, at most one dependency, trivially reversible | **ASMP Compact** |
+| Material consequence, uncertainty, interdependence, stakeholder diversity, lifecycle burden, or evidence burden — or reversible work too large for Compact's narrower ceiling | **ASMP Comprehensive** |
 | Already explicit, immediately reversible, no coordination, no decision value from a formal document | **Lighter action** — skip formal scoping; do the work or track a simple task |
 
 Both protocols include a **Fit and Redirection Gate**. If the chosen protocol is mismatched, the specialist explains why and asks approval before redirecting. Compact does not silently become Comprehensive, and Comprehensive does not impose heavy process on contained work.
+
+This table addresses the work's own complexity. A second, independent factor is where the session is actually running: **ASMP Compact assumes a plain conversational surface with no persistent files** — it is deliberately sized and structured for that context. **ASMP Comprehensive assumes an agentic runtime that can durably read and write files across sessions** — a coding agent or an equivalent automation environment — because its checkpoint system in Section 10 depends on that capability. Running Comprehensive without durable file access degrades its cross-session recoverability guarantee rather than voiding it silently; see `ASMP-Comprehensive.md` §10.4 for how that degradation is disclosed.
 
 ## How to run a protocol
 

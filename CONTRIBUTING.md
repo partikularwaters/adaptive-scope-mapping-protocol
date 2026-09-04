@@ -71,7 +71,7 @@ See [`examples/redirected-scope/README.md`](examples/redirected-scope/README.md)
 
 ## Releases
 
-- Use semantic versioning once the public contract stabilizes; `v0.1.0-draft` marks active structural revision.
+- Use semantic versioning once the public contract stabilizes; `-draft` suffixes (currently `v0.2.0-draft`) mark active structural revision.
 - Tag releases; attach generated PDFs only after render verification against Markdown version/date.
 - Update `CHANGELOG.md` for every release.
 
