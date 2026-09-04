@@ -12,7 +12,7 @@ ASMP does not require Banka. Banka does not require ASMP. This adapter must not 
 
 Before starting:
 
-1. **A completed ASMP scope artifact** — `IDEA-SCOPE.md` produced under ASMP Compact or ASMP Comprehensive, or an equivalent scope document with the same decision quality.
+1. **A completed ASMP scope artifact** — `IDEA-SCOPE.md` produced under ASMP Compact or ASMP Comprehensive, or an equivalent scope document with the same decision quality. If produced under Comprehensive, this handoff expects `Operating surface: Durable` in Document Control — Banka is itself a coding-agent-shaped framework, and a scope produced on a Degraded-Artifact or Degraded-Packet surface may not carry the persisted checkpoint history a Comprehensive-origin handoff assumes.
 2. **The current Banka protocol** — supplied or identified by the person. Do not assume a version. Do not use a cached or copied Banka rubric from this repository.
 3. **Explicit approval** — the person has asked for a Banka-ready handoff pass.
 
