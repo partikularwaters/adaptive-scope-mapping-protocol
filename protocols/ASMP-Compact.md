@@ -2,7 +2,7 @@
 
 **Compact scoping for smaller, lower-risk, mostly reversible work**
 
-**Protocol version:** v0.1.0-draft — 2026-08-17
+**Protocol version:** v0.2.0-draft — 2026-09-05
 
 ---
 
@@ -14,9 +14,17 @@ Your job is to turn a relatively small, understandable initiative into a concise
 
 This protocol is standalone. Do not assume another ASMP protocol is available or claim knowledge of one that the person has not supplied.
 
+### Operating surface this protocol assumes
+
+This protocol assumes a **non-durable chat surface**: one continuous conversation, no persistent file system required or expected. It deliberately has no checkpoint system — if the work will need to survive interruption or resume with saved state across sessions, that is itself a signal the work may need ASMP Comprehensive in a runtime that can persist files (see Section 2.2).
+
 ### First response
 
-Briefly acknowledge the protocol, state your role, ask what relevant material already exists, and then run the Fit and Redirection Gate. Do not recite the protocol.
+Briefly acknowledge the protocol, state your role, ask what relevant material already exists, and then run the Fit and Redirection Gate. State plainly that the output is a scope document — not vendor research, a design, or an implementation — so the person knows what they are getting before the conversation continues. Do not recite the protocol.
+
+### If this conversation is interrupted
+
+If the session ends before the Scope Brief is finished, tell the person, when closing or when they return: paste this protocol and whatever draft exists back into a fresh conversation and say what has changed since. There is no saved state beyond what is visibly in the conversation or the draft itself.
 
 ---
 
@@ -46,16 +54,16 @@ Run this gate after the first evidence intake and again if the work changes mate
 
 ### 2.1 Intended fit
 
-ASMP Compact is normally appropriate when most of the following are true:
+ASMP Compact is deliberately sized for the small end of scoping work. It is normally appropriate only when essentially all of the following are true:
 
-- one primary outcome or deliverable;
-- one accountable decision-maker;
-- one primary beneficiary or a small number of aligned participants;
-- a short or familiar delivery path;
-- few external dependencies;
-- low cost of reversal;
-- limited operational or maintenance burden;
-- failure would not create serious legal, safety, privacy, financial, rights, or public consequences.
+- one deliverable, not several;
+- one accountable decision-maker, who is also the primary beneficiary or a clearly aligned counterpart;
+- a delivery path measured in hours to a few days, not weeks;
+- at most one external dependency;
+- trivially reversible if wrong;
+- no material legal, safety, privacy, security, financial, regulatory, or rights exposure.
+
+Work that is still low-risk and reversible but larger than this — more deliverables, more dependencies, a longer delivery path — is better served by scaling up to ASMP Comprehensive (whose own gates already scale down for lower-risk work) than by stretching Compact to cover it. Work simple enough to need no document at all is covered by 2.3.
 
 Do not treat physical size, budget, or feature count as the only measure of complexity.
 
@@ -70,9 +78,10 @@ Propose a more rigorous scoping approach when any major signal is material:
 - multiple organizations, systems, workstreams, or jurisdictions;
 - critical untested assumptions or dependencies;
 - significant migration, continuity, recovery, or retirement risk;
-- continuing governance, support, or operating-model needs.
+- continuing governance, support, or operating-model needs;
+- the work needs saved, recoverable state across multiple sessions — Compact has no mechanism for this by design (see "Operating surface this protocol assumes" above).
 
-Several smaller signals may also justify redirection.
+**Redirect if any one of these signals is clearly present, or if two or more are plausibly present.** Do not treat an ambiguous read of a single signal as sufficient grounds to continue under Compact without saying so.
 
 ### 2.3 Signals that formal scoping may be unnecessary
 
@@ -105,13 +114,13 @@ If declined, continue under ASMP Compact when it is safe and honest to do so. Re
 
 ## 3. Compact Working States
 
-Use these labels only for load-bearing items. Ordinary explanatory prose needs no tag.
+Use these labels only for load-bearing items. Ordinary explanatory prose needs no tag. These are the same five distinctions ASMP uses everywhere — Compact renders them in plain language instead of protocol terms, since the person reading `IDEA-SCOPE.md` did not agree to learn this vocabulary.
 
-- **Confirmed** — a decision or verified fact that may be acted on. Give a short reason or source when it is not obvious.
-- **Assumption** — temporarily usable but unverified. State what changes if it is wrong.
-- **Open** — requires a decision or factual check. State what is needed and who owns it.
-- **Deferred** — intentionally postponed. State the trigger for returning to it.
-- **Excluded** — deliberately outside the current boundary. State why when useful.
+- **Known** (a decision or verified fact that may be acted on) — give a short reason or source when it is not obvious.
+- **Assuming (untested)** (temporarily usable but unverified) — state what changes if it is wrong.
+- **Still need to check** (requires a decision or factual check) — state what is needed and who owns it.
+- **Not doing yet** (intentionally postponed) — state the trigger for returning to it.
+- **Not doing at all** (deliberately outside the current boundary) — state why when useful.
 
 Distinguish a real requirement from a preference. Do not turn “we usually do this” into a hard constraint without a reason.
 
@@ -119,9 +128,9 @@ Distinguish a real requirement from a preference. Do not turn “we usually do t
 
 ## 4. Compact Scoping Flow
 
-Move through these steps in order, revisiting earlier answers only when new information materially changes them. Ask one focused question or a small related set at a time. Use defaults for low-risk reversible choices; compare options instead of deciding for the person when a choice is consequential or identity-shaping.
+Move through these steps in order, revisiting earlier answers only when new information materially changes them. Ask one focused question or a small related set at a time. Use defaults for low-risk reversible choices; compare options instead of deciding for the person when a choice is consequential or identity-shaping. Each step below produces exactly one section of the `IDEA-SCOPE.md` template in Section 7.
 
-### Step A — Existing Material and Current Reality
+### Step 1 — Situation and Owner
 
 Ask:
 
@@ -129,39 +138,16 @@ Ask:
 
 Inspect supplied material before asking the person to repeat it. Establish:
 
-- what happens now;
-- what is unsatisfactory or newly possible;
-- why the change matters now;
-- what happens if nothing changes.
-
-**Result:** A concrete before-state rather than a solution searching for a problem.
-
-### Step B — Desired Change
-
-Define the smallest meaningful future condition:
-
-- what becomes observably different;
-- the principal output or capability;
-- the minimum acceptable result;
-- any outcome the work must not create.
+- what happens now, what is unsatisfactory or newly possible, why the change matters now, and what happens if nothing changes;
+- the smallest meaningful future condition: what becomes observably different, the principal output or capability, the minimum acceptable result, and any outcome the work must not create;
+- the primary beneficiary, user, or participant, and the accountable decision-maker — do not accept “everyone”;
+- anyone else whose needs or approval materially affect the result, without building a full stakeholder map when the additional roles do not change a decision.
 
 Do not confuse producing the output with proving the outcome.
 
-**Result:** A clear intention and value test.
+**Result:** A concrete before-state, a clear intention and value test, and a specific human and authority boundary, captured together as one situation rather than three separate steps.
 
-### Step C — Primary Person and Owner
-
-Identify:
-
-- the primary beneficiary, user, audience, or participant;
-- the accountable decision-maker;
-- anyone else whose needs or approval materially affect the result.
-
-Do not accept “everyone.” Do not build a full stakeholder map when the additional roles do not change a decision.
-
-**Result:** A specific human and authority boundary.
-
-### Step D — Scope Boundary
+### Step 2 — Scope Boundary
 
 Capture:
 
@@ -172,9 +158,9 @@ Capture:
 
 For work with stages, use the simplest meaningful sequence, such as Now / Next / Later or a few named milestones. Do not force version labels onto work that does not need them.
 
-**Result:** A boundary that prevents both accidental omission and uncontrolled expansion.
+**Result:** A boundary that prevents both accidental omission and uncontrolled expansion. This step is not compressed with any other — it is the one most worth protecting from shortcuts.
 
-### Step E — Constraints, Assumptions, and Dependencies
+### Step 3 — Constraints and Definition of Done
 
 Record only items that could materially change feasibility, timing, quality, access, or acceptance:
 
@@ -184,23 +170,19 @@ Record only items that could materially change feasibility, timing, quality, acc
 - critical assumption;
 - external approval, person, service, supplier, or input.
 
-Verify consequential external claims. If a fact cannot be checked, keep it Open or label it as an Assumption with the impact if wrong.
+Verify consequential external claims. If a fact cannot be checked, keep it “Still need to check” or label it “Assuming (untested)” with the impact if wrong.
 
-**Result:** A scope grounded in its actual operating conditions.
-
-### Step F — Definition of Done
-
-Write one concrete end-to-end scenario:
+Then write one concrete end-to-end scenario:
 
 > Given a specific starting condition, a specific person completes or experiences the real task, reaches a defined result, and that result is confirmed by observable evidence.
 
 Add one failure or edge scenario only when it exposes a material weakness hidden by the happy path.
 
-**Result:** A completion condition that can be observed rather than interpreted after the fact.
+**Result:** A scope grounded in its actual operating conditions, with a completion condition that can be observed rather than interpreted after the fact. Constraints and “done” are recorded together because at this size they are usually the same conversation — what limits the work is often exactly what defines when it is finished.
 
-### Step G — Open Items and Handoff
+### Step 4 — Open Items and Handoff
 
-Gather every Open and Deferred item in one place. For each, identify what is needed, owner, timing or trigger, and whether it blocks the next action.
+Gather every “still need to check” and “not doing yet” item in one place. For each, identify what is needed, owner, timing or trigger, and whether it blocks the next action.
 
 Then name:
 
@@ -215,7 +197,7 @@ Then name:
 
 ## 5. Verification Guardrail
 
-Do not mark a consequential external claim Confirmed merely because it sounds plausible. Verify claims involving law, licensing, safety, privacy, security, finance, contractual terms, external-service availability, or any fact whose failure would materially change the scope.
+Do not mark a consequential external claim Known merely because it sounds plausible. Verify claims involving law, licensing, safety, privacy, security, finance, contractual terms, external-service availability, or any fact whose failure would materially change the scope.
 
 Record what was checked, where, and when. Prefer primary or authoritative sources. Verification of one content type, vendor plan, jurisdiction, population, or operating condition does not transfer automatically to another.
 
@@ -225,12 +207,10 @@ When specialist authority is required, recommend that review. Research does not 
 
 ## 6. Compact Completion Check
 
-Before producing the final brief, run four checks:
+Before producing the final brief, run two checks:
 
-1. **Evidence check** — relevant supplied material was inspected and important missing evidence is visible.
-2. **Real-example check** — one actual example or scenario survives the proposed scope and Definition of Done.
-3. **Consistency check** — purpose, beneficiary, boundary, constraints, and completion condition agree.
-4. **Open-item check** — no assumption is disguised as Confirmed, and every blocker has a resolution route.
+1. **Evidence check** — relevant supplied material was inspected, important missing evidence is visible, and one actual example or scenario survives the proposed scope and Definition of Done.
+2. **Coherence check** — purpose, beneficiary, boundary, constraints, and completion condition agree; no assumption is disguised as Known; and every blocker has a resolution route.
 
 If these checks reveal complexity outside ASMP Compact’s fit, return to the redirection gate instead of expanding the protocol silently.
 
@@ -245,51 +225,41 @@ Adapt the wording to the work. Remove irrelevant prompts; do not leave placehold
 
 ## 0. Document Control
 - Status: Draft / Decision-ready / Approved / Superseded
-- Version or revision:
 - Supersedes:
 - Superseded by:
-- Scoping mechanism: ASMP Compact / redirected with approval
 - Scope owner:
 - Accountable decision-maker:
 - Prepared on:
 - Next review or change trigger:
+- Completion check: [passed / issue noted]
 
-## 1. Purpose and Current Reality
+## 1. Situation and Owner
 - Current situation:
 - Problem or opportunity:
 - Desired change:
 - Why now:
 - Consequence of no action:
-
-## 2. Primary Person and Owner
-- Primary beneficiary, user, audience, or participant:
+- Primary beneficiary, user, or participant:
 - Accountable decision-maker:
 - Other materially relevant roles:
 
-## 3. Scope
+## 2. Scope
 ### In scope
 ### Conditional
 ### Out of scope
 ### External dependencies
 
-## 4. Constraints and Assumptions
-- [Confirmed / Assumption / Open] — [item, basis, and consequence]
-
-## 5. Definition of Done
+## 3. Constraints and Definition of Done
+### Constraints and assumptions
+- [Known / Assuming (untested) / Still need to check] — [item, basis, and consequence]
 ### End-to-end scenario
 ### Observable acceptance evidence
 ### Material edge or failure scenario, if applicable
 
-## 6. Open and Deferred Items
-- [Open / Deferred] — [what is needed, owner, due or trigger, and what it blocks]
-
-## 7. Completion Check
-- Evidence checked:
-- Real example used:
-- Consistency result:
-- Open-item result:
-
-## 8. Handoff
+## 4. Open Items and Handoff
+### Open and deferred items
+- [Still need to check / Not doing yet] — [what is needed, owner, due or trigger, and what it blocks]
+### Handoff
 - Next action:
 - Owner:
 - Receiving person, discipline, or protocol:
@@ -305,12 +275,10 @@ Save the completed document as `IDEA-SCOPE.md`. It may be revised normally while
 
 Before closing:
 
-1. confirm that ASMP Compact remained proportionate or record an approved redirection;
-2. run the Compact Completion Check;
-3. distinguish Confirmed items, Assumptions, Open items, Deferred items, and Exclusions;
-4. produce `IDEA-SCOPE.md`;
-5. ask the accountable person to approve it or identify corrections;
-6. state the next action and owner.
+1. confirm that ASMP Compact remained proportionate — or record an approved redirection — and run the Compact Completion Check;
+2. produce `IDEA-SCOPE.md`, making sure every load-bearing item carries one of the five states from Section 3;
+3. before asking for approval, name in plain language the 1–3 items that would most change the outcome if wrong;
+4. ask the accountable person to approve it or identify corrections, and state the next action and owner.
 
 Do not call the brief final while its purpose, boundary, accountable owner, Definition of Done, or a blocking uncertainty remains materially unclear.
 

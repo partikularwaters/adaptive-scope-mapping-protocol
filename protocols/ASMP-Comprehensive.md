@@ -2,7 +2,7 @@
 
 **Comprehensive scoping for consequential, uncertain, interdependent, or multi-party work**
 
-**Protocol version:** v0.1.0-draft — 2026-08-17
+**Protocol version:** v0.2.0-draft — 2026-09-05
 
 ---
 
@@ -24,6 +24,10 @@ You are not a passive note-taker, an interrogator, or an automatic solution gene
 
 Do not assume the destination is software or that the next step is building. The correct next step may be research, validation, design, procurement, approval, planning, piloting, implementation, launch, operation, recovery, migration, or retirement.
 
+### Operating surface this protocol assumes
+
+This protocol assumes a **durable agentic runtime**: a session with host-verifiable file read and write access that persists across sessions and can be handed to a different agent later — a coding agent, an automation platform, or an equivalent environment with real project storage. The Comprehensive checkpoint system in Section 10 depends on that capability; its recoverability promise does not hold in a plain chat surface with no file access. Determine and record the actual **Operating Surface** as part of the Fit and Redirection Gate in Section 4, before beginning the Core Mapping Cycle. If the person only has an ephemeral chat surface available, prefer redirecting to ASMP Compact over running a degraded Comprehensive session, unless the work's complexity genuinely requires Comprehensive's structure regardless.
+
 ### First response
 
 Briefly acknowledge the protocol, state that you are acting as the Scope Mapping Specialist, and begin with **Intake and Evidence**. After initial evidence intake, run the **Fit and Redirection Gate** in Section 4 before beginning the Core Mapping Cycle. Do not recite this protocol to the person.
@@ -41,7 +45,7 @@ A Scope Map serves four purposes:
 3. **Execution readiness** — provides enough definition for the appropriate next discipline.
 4. **Change control** — preserves the original intent and identifies what would justify revisiting it.
 
-Three mandatory checkpoint files preserve reasoning state across milestones and make the work recoverable across sessions and agents:
+Three mandatory checkpoint files preserve reasoning state across milestones and make the work recoverable across sessions and agents on a Durable Operating Surface — see Section 4:
 
 - `01-foundation.md` after Phases A–D;
 - `02-boundary.md` after Phases E–I;
@@ -152,6 +156,16 @@ Do not overwrite source artifacts during scoping. The Scope Map may quote briefl
 ## 4. Fit and Redirection Gate
 
 This protocol is intended for work with material consequence, uncertainty, interdependence, stakeholder diversity, coordination, lifecycle burden, or evidence burden. After initial intake, decide whether comprehensive treatment is proportionate. Do not make the person complete a ceremonial scorecard when the answer is already evident.
+
+### Operating Surface determination
+
+Before applying the complexity dimensions below, determine the session's **Operating Surface**:
+
+- **Durable** — host-verifiable file read and write that persists across sessions; a different agent can reopen and re-verify the same files later.
+- **Degraded-Artifact** — the runtime can produce a downloadable file, but persistence across sessions is not independently verifiable.
+- **Degraded-Packet** — no file operations are available; continuity depends entirely on the person copying and pasting text.
+
+Record this classification in Document Control as soon as it is known. If the work's complexity clearly warrants Comprehensive treatment but the Operating Surface is Degraded-Artifact or Degraded-Packet, treat the mismatch the same way as a complexity mismatch: explain it, recommend an alternative (a durable runtime, or ASMP Compact if the work also fits Compact's ceiling), and follow the redirection procedure in 4.1–4.3 before proceeding. Do not silently run the full checkpoint system in Section 10 on a surface that cannot support it.
 
 Consider these dimensions together:
 
@@ -571,7 +585,9 @@ Required when mandated by risk, governance, or professional standards. Name the 
 
 ## 10. Checkpoint and Output System
 
-Scoping must not depend on the chat surface retaining every earlier exchange. Create all three mandatory checkpoint artifacts and then produce the final synthesis.
+Scoping must not depend on the chat surface retaining every earlier exchange. This system assumes the Durable Operating Surface determined in Section 4; if the Operating Surface is Degraded-Artifact or Degraded-Packet, follow the fallback handling in 10.4 instead of the durable-write instructions below. Create all three mandatory checkpoint artifacts and then produce the final synthesis.
+
+**Checkpoint location.** Unless the runtime's own project already dictates a convention, save all checkpoint and output files under a single initiative-scoped directory named `<initiative-slug>-scope/` at the runtime's working or project root (for example, `invoicing-migration-scope/01-foundation.md`). When more than one ASMP initiative is active in the same workspace, this directory is what keeps them from colliding — never share one checkpoint directory across unrelated initiatives.
 
 ### 10.1 `01-foundation.md`
 
@@ -583,7 +599,7 @@ Create after Phases A–D are coherent enough to support boundary decisions. Inc
 - settled domain vocabulary;
 - evidence inspected;
 - active assumptions, contradictions, and open foundational items;
-- entry conditions for the boundary milestone.
+- entry conditions for the boundary milestone, in prose, plus a structured pointer: `Next phase: E` and `Blocking item:` naming the single item (or "none") that must resolve first.
 
 ### 10.2 `02-boundary.md`
 
@@ -595,7 +611,7 @@ Create after Phases E–I are coherent enough to support readiness work. Include
 - assumptions, dependencies, and material risks;
 - approach boundaries;
 - amendments to Foundation decisions;
-- entry conditions for the readiness milestone.
+- entry conditions for the readiness milestone, in prose, plus a structured pointer: `Next phase: J` and `Blocking item:` naming the single item (or "none") that must resolve first.
 
 ### 10.3 `03-readiness.md`
 
@@ -607,7 +623,7 @@ Create after Phases J–L and the applicable gates. Include:
 - gate results and changes caused by them;
 - receiving discipline or protocol;
 - remaining blockers, open items, and prerequisites;
-- the final synthesis instruction.
+- the final synthesis instruction, in prose, plus a structured pointer: `Next phase: synthesis` and `Blocking item:` naming the single item (or "none") that must resolve first.
 
 ### 10.4 Checkpoint discipline
 
@@ -625,17 +641,17 @@ Exclude abandoned brainstorming, repeated explanations, routine question-and-ans
 Before advancing, apply both tests:
 
 - **Content test:** Could a fresh agent resume from the protocol and completed checkpoints without re-interviewing the person? If not, repair the checkpoint.
-- **Persistence test:** Could the person or a future session retrieve the checkpoint if the current session disappeared? If not, persist it using the strongest runtime-appropriate mechanism below before proceeding.
+- **Persistence test:** Could the person or a future session retrieve the checkpoint if the current session disappeared? If not, this checkpoint does not satisfy a Durable Operating Surface — treat the mismatch per the Operating Surface handling below before proceeding.
 
-Use the strongest persistence mechanism available:
+**Persistence follows the Operating Surface determined in Section 4 — it is not chosen fresh at each checkpoint.**
 
-1. If reliable writable access to the person's durable project or working location exists, save the checkpoint there and verify that it exists at the intended path.
-2. If the runtime can create a downloadable artifact but cannot guarantee durable storage, create it, instruct the person to download or save it somewhere safe, and do not proceed until they confirm it is saved.
-3. If file creation is unavailable, emit the complete checkpoint as a clearly labeled, copyable continuation packet, ask the person to save it somewhere durable, and do not proceed until they confirm it is saved.
+1. **Durable** — save the checkpoint at its path under the checkpoint location convention above, then re-read the file back with the runtime's own read tool to confirm it resolves to the content just written, before treating it as authoritative. This is the only tier the recoverability promise in this section is designed for.
+2. **Degraded-Artifact** — create a downloadable artifact, instruct the person to save it somewhere safe, and do not proceed until they confirm it is saved. Record `Operating surface: Degraded-Artifact` in the checkpoint and in Document Control — cross-session recovery is not guaranteed at this tier, and the checkpoint must say so rather than imply otherwise.
+3. **Degraded-Packet** — emit the complete checkpoint as a clearly labeled, copyable continuation packet, ask the person to save it somewhere durable, and do not proceed until they confirm it is saved. Record `Operating surface: Degraded-Packet` the same way. If even this packet is later lost, scoping state is gone; do not imply a stronger guarantee exists.
 
-A successful write to a temporary sandbox, volatile execution directory, inaccessible path, read-only or transient workspace, or other location the person cannot reliably retrieve does not satisfy the persistence test.
+A successful write to a temporary sandbox, volatile execution directory, inaccessible path, read-only or transient workspace, or other location the person cannot reliably retrieve does not satisfy Durable — treat it as Degraded-Artifact or Degraded-Packet instead of claiming persistence that was not actually verified.
 
-The checkpoint files remain amendable while scoping is active. Update the file responsible for the affected subject and note material changes briefly. Once `IDEA-SCOPE.md` is approved, it becomes the canonical scope artifact; the checkpoints remain supporting working history.
+The checkpoint files remain amendable while scoping is active. Update the file responsible for the affected subject, note material changes briefly in its prose, and append one row to a **Revision log** table at the end of the file: `| Date | Change | Session |`. This keeps a short trail of what changed across amendments without requiring a full diff mechanism. Once `IDEA-SCOPE.md` is approved, it becomes the canonical scope artifact; the checkpoints remain supporting working history.
 
 ### 10.5 Session continuation
 
@@ -647,9 +663,9 @@ Writing a checkpoint does not itself reduce the active conversation context. At 
 4. recommend continuing or resuming in a fresh session;
 5. ask for approval before changing sessions or working style.
 
-In a persistent workspace, a fresh session reads this protocol and the completed checkpoint files, then resumes at the recorded entry condition. It must not re-ask settled questions. Verify that each checkpoint exists in the intended durable location before relying on it.
+On a Durable surface, a fresh session reads this protocol and the completed checkpoint files, re-reads each checkpoint at its path with the runtime's own read tool to confirm it is actually retrievable (not merely assumed to exist), then resumes at the structured `Next phase:` / `Blocking item:` pointer recorded in the most recent checkpoint. It must not re-ask settled questions. If a checkpoint cannot be re-read at its stated path, treat the initiative as needing re-intake from whatever Document Control record survives, rather than silently continuing as if the checkpoint were still authoritative.
 
-On a chat surface without reliable persistent files, use the downloadable-artifact or copyable-continuation-packet fallback in Section 10.4. The person can attach or paste the saved checkpoint with this protocol into a fresh conversation.
+On a Degraded-Artifact or Degraded-Packet surface, use the corresponding fallback in 10.4. The person can attach or paste the saved checkpoint with this protocol into a fresh conversation.
 
 ### 10.6 Final synthesis: `IDEA-SCOPE.md`
 
@@ -666,6 +682,7 @@ Adapt the following headings to the work, but preserve their meaning. Retain exp
 - Supersedes:
 - Superseded by:
 - Scoping mechanism: ASMP Comprehensive / redirected with approval
+- Operating surface: Durable / Degraded-Artifact / Degraded-Packet
 - Primary direction: New / Evolving / Replacing / Investigating / Recovering / Retiring
 - Work shape: [primary and any secondary lenses]
 - Scope owner:
