@@ -1,6 +1,6 @@
 # Scope Map — [Initiative Name]
 
-> **Synchronized with:** `protocols/ASMP-Comprehensive.md` Section 10.6 (protocol version v0.2.0-draft — 2026-09-05)
+> **Synchronized with:** `protocols/comprehensive/steps/04-synthesis.md` and `protocols/comprehensive/PORTABLE.md` (protocol version v0.2.0-draft — 2026-10-11)
 >
 > This template extracts the Comprehensive output contract. It introduces no requirements beyond the canonical protocol.
 

@@ -1,6 +1,6 @@
 # Scope Brief — [Initiative Name]
 
-> **Synchronized with:** `protocols/ASMP-Compact.md` Section 7 (protocol version v0.2.0-draft — 2026-09-05)
+> **Synchronized with:** `protocols/compact/PORTABLE.md` Section 5 (protocol version v0.2.0-draft — 2026-10-11)
 >
 > This template extracts the Compact output contract. It introduces no requirements beyond the canonical protocol.
 
