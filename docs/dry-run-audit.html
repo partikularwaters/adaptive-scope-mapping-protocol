@@ -1,0 +1,652 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>ASMP Dry-Run Audit</title>
+<style>
+  :root{
+    --ink:#1a2421;
+    --ink-soft:#42504b;
+    --paper:#eef1ee;
+    --surface:#ffffff;
+    --line:#cdd3c9;
+    --line-soft:#dde1d9;
+    --accent:#2e5266;
+    --accent-ink:#173340;
+    --user:#2f6e5e;
+    --builder:#4b4a7c;
+    --risk:#9c5b3c;
+    --sev-high:#a8402f;
+    --sev-high-bg:#f6e3e0;
+    --sev-mid:#9c6b1f;
+    --sev-mid-bg:#f3e9d4;
+    --sev-low:#4c6e4f;
+    --sev-low-bg:#e3ecdf;
+    --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body:'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --font-mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#e9ece7;
+      --ink-soft:#b6bdb4;
+      --paper:#161c19;
+      --surface:#1e2622;
+      --line:#3a433d;
+      --line-soft:#2c3530;
+      --accent:#7fb0c4;
+      --accent-ink:#c9e2ea;
+      --user:#7fc4ab;
+      --builder:#a6a3e0;
+      --risk:#d99a72;
+      --sev-high:#e08a78;
+      --sev-high-bg:#3a2320;
+      --sev-mid:#dab876;
+      --sev-mid-bg:#3a2f18;
+      --sev-low:#94c295;
+      --sev-low-bg:#233327;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#e9ece7;
+    --ink-soft:#b6bdb4;
+    --paper:#161c19;
+    --surface:#1e2622;
+    --line:#3a433d;
+    --line-soft:#2c3530;
+    --accent:#7fb0c4;
+    --accent-ink:#c9e2ea;
+    --user:#7fc4ab;
+    --builder:#a6a3e0;
+    --risk:#d99a72;
+    --sev-high:#e08a78;
+    --sev-high-bg:#3a2320;
+    --sev-mid:#dab876;
+    --sev-mid-bg:#3a2f18;
+    --sev-low:#94c295;
+    --sev-low-bg:#233327;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--accent); color:var(--surface); }
+  a{ color:var(--accent-ink); }
+  h1,h2,h3,h4{ font-family:var(--font-display); font-weight:600; text-wrap:balance; margin:0; color:var(--ink); }
+  p{ margin:0 0 1em; }
+  .wrap{ max-width:920px; margin:0 auto; padding:0 28px; }
+  .narrow{ max-width:66ch; }
+
+  /* ---------- nav ---------- */
+  nav.jump{
+    position:sticky; top:0; z-index:20;
+    background:color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.jump .wrap{
+    display:flex; gap:22px; align-items:center;
+    padding:12px 28px; overflow-x:auto;
+    font-family:var(--font-mono); font-size:12.5px; letter-spacing:.04em;
+  }
+  nav.jump a{ color:var(--ink-soft); text-decoration:none; white-space:nowrap; }
+  nav.jump a:hover{ color:var(--accent-ink); }
+  nav.jump .brand{ color:var(--ink); font-weight:700; margin-right:4px; }
+
+  /* ---------- masthead ---------- */
+  header.masthead{ padding:64px 0 40px; border-bottom:1px solid var(--line); }
+  .eyebrow{
+    font-family:var(--font-mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--accent-ink); margin:0 0 14px;
+  }
+  h1.title{ font-size:clamp(2.1rem, 4.4vw, 3.1rem); line-height:1.06; letter-spacing:-.01em; }
+  .subtitle{ font-family:var(--font-body); font-size:1.15rem; color:var(--ink-soft); max-width:62ch; margin-top:18px; }
+  .meta-row{
+    display:flex; flex-wrap:wrap; gap:10px 28px; margin-top:28px;
+    font-family:var(--font-mono); font-size:12.5px; color:var(--ink-soft);
+  }
+  .meta-row b{ color:var(--ink); font-weight:600; }
+
+  /* ---------- methodology cards ---------- */
+  section.method{ padding:44px 0 8px; }
+  .method h2{ font-size:1.05rem; font-family:var(--font-mono); letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:22px; }
+  .method-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .method-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:3px;
+    padding:20px 20px 22px; border-top:3px solid var(--card-color, var(--accent));
+  }
+  .method-card .role{ font-family:var(--font-mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--card-color, var(--accent)); margin-bottom:6px;}
+  .method-card h3{ font-size:1.2rem; margin-bottom:8px; }
+  .method-card p{ font-size:.94rem; color:var(--ink-soft); margin-bottom:6px; }
+  .method-card .protocol-tag{ font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft); }
+
+  /* ---------- agent report sections ---------- */
+  section.report{ padding:56px 0; border-bottom:1px solid var(--line); }
+  .report-head{
+    display:flex; align-items:baseline; gap:16px; margin-bottom:6px; flex-wrap:wrap;
+  }
+  .report-head .role-eyebrow{
+    font-family:var(--font-mono); font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--report-color); border:1px solid var(--report-color); padding:3px 9px; border-radius:2px;
+  }
+  .report h2{ font-size:1.9rem; }
+  .report .project-line{ font-family:var(--font-mono); font-size:13px; color:var(--ink-soft); margin:10px 0 26px; }
+
+  .verdict-block{
+    border-left:3px solid var(--report-color);
+    padding:4px 0 4px 20px; margin-bottom:32px;
+  }
+  .verdict-block .label{ font-family:var(--font-mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--report-color); margin-bottom:8px; }
+  .verdict-block p{ font-size:1.02rem; color:var(--ink); max-width:70ch; }
+
+  .trace{
+    background:var(--surface); border:1px solid var(--line-soft); border-radius:3px;
+    padding:22px 24px; margin-bottom:34px;
+  }
+  .trace .label{ font-family:var(--font-mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:12px; }
+  .trace p{ font-size:.96rem; color:var(--ink-soft); }
+  .trace p:last-child{ margin-bottom:0; }
+  .trace strong{ color:var(--ink); }
+  .trace .excerpt{
+    font-family:var(--font-mono); font-size:12.5px; line-height:1.65;
+    background:var(--paper); border:1px solid var(--line-soft); border-radius:2px;
+    padding:14px 16px; margin:12px 0; white-space:pre-wrap; color:var(--ink-soft);
+    overflow-x:auto;
+  }
+
+  .findings-label{ font-family:var(--font-mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:14px; }
+  .finding{
+    display:grid; grid-template-columns:32px 1fr auto; gap:14px; align-items:start;
+    padding:14px 0; border-top:1px solid var(--line-soft);
+  }
+  .finding:last-child{ border-bottom:1px solid var(--line-soft); }
+  .finding .num{ font-family:var(--font-mono); color:var(--ink-soft); font-size:13px; padding-top:2px; }
+  .finding .body p{ font-size:.95rem; margin-bottom:4px; }
+  .finding .cite{ font-family:var(--font-mono); font-size:11.5px; color:var(--report-color); display:block; margin-bottom:5px; }
+  .badge{
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:.05em; text-transform:uppercase;
+    padding:4px 8px; border-radius:2px; white-space:nowrap; height:fit-content;
+  }
+  .badge.high{ color:var(--sev-high); background:var(--sev-high-bg); }
+  .badge.mid{ color:var(--sev-mid); background:var(--sev-mid-bg); }
+  .badge.low{ color:var(--sev-low); background:var(--sev-low-bg); }
+
+  /* ---------- consolidation ---------- */
+  section.consolidation{ padding:56px 0; border-bottom:1px solid var(--line); }
+  .consolidation h2{ font-size:2rem; margin-bottom:8px; }
+  .consolidation > .wrap > p.narrow{ color:var(--ink-soft); margin-bottom:38px; }
+
+  .axis-group{ margin-bottom:14px; }
+  .axis-group-label{
+    font-family:var(--font-mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+    padding:6px 0; margin-bottom:18px; color:var(--ink);
+    border-bottom:1px solid var(--line);
+  }
+  .axis-group-label.agree{ color:var(--sev-low); }
+  .axis-group-label.disagree{ color:var(--sev-mid); }
+
+  .axis{
+    background:var(--surface); border:1px solid var(--line-soft); border-radius:3px;
+    padding:20px 22px; margin-bottom:14px;
+  }
+  .axis h4{ font-size:1.05rem; margin-bottom:8px; }
+  .axis p{ font-size:.95rem; color:var(--ink-soft); margin-bottom:10px; }
+  .axis p:last-child{ margin-bottom:0; }
+  .who{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .who span{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.03em;
+    padding:3px 9px; border-radius:12px; border:1px solid var(--line);
+  }
+  .who .u{ color:var(--user); border-color:var(--user); }
+  .who .b{ color:var(--builder); border-color:var(--builder); }
+  .who .r{ color:var(--risk); border-color:var(--risk); }
+
+  /* ---------- verdict ---------- */
+  section.final{ padding:60px 0 90px; }
+  .verdict-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:4px; overflow:hidden;
+  }
+  .verdict-card .control{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+    padding:16px 26px; border-bottom:1px solid var(--line);
+    font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft); letter-spacing:.04em;
+  }
+  .verdict-card .control b{ color:var(--ink); }
+  .verdict-card .body{ padding:30px 30px 8px; }
+  .verdict-card h2{ font-size:1.7rem; margin-bottom:18px; }
+  .verdict-card p{ font-size:1rem; max-width:74ch; }
+
+  .tier-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--line); margin:26px 0 6px; border:1px solid var(--line); border-radius:3px; overflow:hidden;
+  }
+  .tier{ background:var(--surface); padding:18px 20px; }
+  .tier .tier-status{ font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; margin-bottom:8px; }
+  .tier.pass .tier-status{ color:var(--sev-low); }
+  .tier.conditional .tier-status{ color:var(--sev-mid); }
+  .tier.fail .tier-status{ color:var(--sev-high); }
+  .tier h4{ font-size:1.02rem; margin-bottom:6px; }
+  .tier p{ font-size:.88rem; color:var(--ink-soft); margin:0; }
+
+  .closing{ padding:26px 30px 30px; font-size:.95rem; color:var(--ink-soft); }
+  .closing p{ max-width:74ch; }
+
+  footer{ padding:30px 28px 60px; font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft); text-align:center; }
+
+  @media (max-width: 720px){
+    .method-grid{ grid-template-columns:1fr; }
+    .tier-grid{ grid-template-columns:1fr; }
+    .finding{ grid-template-columns:24px 1fr; }
+    .finding .badge{ grid-column:2; margin-top:6px; }
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<nav class="jump">
+  <div class="wrap">
+    <span class="brand">ASMP DRY-RUN</span>
+    <a href="#user">User</a>
+    <a href="#builder">Builder</a>
+    <a href="#risk">Risk Owner</a>
+    <a href="#consolidation">Consolidation</a>
+    <a href="#verdict">Verdict</a>
+  </div>
+</nav>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow">Protocol dry-run — three-agent audit</p>
+    <h1 class="title">Does the Adaptive Scope&nbsp;Mapping Protocol hold up in the room?</h1>
+    <p class="subtitle">Three independent reviewers each ran ASMP against a different real project, from a different accountability lens — usability, architecture, and risk — then compared notes without softening disagreement.</p>
+    <div class="meta-row">
+      <span><b>Subject</b> — protocols/ASMP-Compact.md &amp; ASMP-Comprehensive.md, v0.1.0-draft</span>
+      <span><b>Method</b> — 3 agents · 3 perspectives · 3 unrelated projects</span>
+      <span><b>Date</b> — 2026-09-05</span>
+    </div>
+  </div>
+</header>
+
+<section class="method">
+  <div class="wrap">
+    <h2>The three dry-runs</h2>
+    <div class="method-grid">
+      <div class="method-card" style="--card-color:var(--user)">
+        <div class="role">User — Real-World Usability</div>
+        <h3>Dental clinic booking</h3>
+        <p>A non-technical two-dentist clinic owner asks an AI to scope "add online appointment booking."</p>
+        <p class="protocol-tag">Ran under ASMP Compact</p>
+      </div>
+      <div class="method-card" style="--card-color:var(--builder)">
+        <div class="role">Builder — Architecture &amp; Correctness</div>
+        <h3>Monolith → microservices</h3>
+        <p>A 6-person team scopes decomposing a legacy invoicing monolith, across multiple sessions and agents.</p>
+        <p class="protocol-tag">Ran under ASMP Comprehensive</p>
+      </div>
+      <div class="method-card" style="--card-color:var(--risk)">
+        <div class="role">Risk Owner — Security, Failure &amp; Recovery</div>
+        <h3>Benefits eligibility screener</h3>
+        <p>A city government scopes an AI-assisted pre-screener for public benefits, tested adversarially.</p>
+        <p class="protocol-tag">Ran under ASMP Comprehensive</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ USER ============ -->
+<section class="report" id="user" style="--report-color:var(--user)">
+  <div class="wrap">
+    <div class="report-head">
+      <span class="role-eyebrow">User</span>
+      <h2>Real-World Usability</h2>
+    </div>
+    <p class="project-line">Project: online booking for a 2-dentist clinic · ASMP Compact, Steps A–G</p>
+
+    <div class="verdict-block">
+      <div class="label">Verdict</div>
+      <p>Yes, but with real friction. A non-technical owner can walk out with a usable one-page brief — the flow maps naturally onto how a busy owner already thinks. But the protocol leaks its own process vocabulary into the conversation and the final document with no instruction to translate it, and it hands the one genuinely hard question here — patient-data privacy — to a "verify or leave Open" mechanism that never actually resolves it for the owner.</p>
+    </div>
+
+    <div class="trace">
+      <div class="label">Simulated trace</div>
+      <p><strong>AI:</strong> "Anything already in place I should look at?" <strong>Owner:</strong> "Website's just something my nephew built years ago… I saw Zocdoc has booking, want something like that. Budget — whatever's reasonable."</p>
+      <p>The Fit Gate correctly surfaces one real signal — booking collects patient name, phone, and visit reason, which is privacy/HIPAA-adjacent for a dental practice — but saying so out loud ("I want to flag it, not escalate this") reads to the owner as the session suddenly getting complicated for no reason she asked for.</p>
+      <p>Partial <code>IDEA-SCOPE.md</code> produced from the run:</p>
+      <div class="excerpt">## 4. Constraints and Assumptions
+- Open — Vendor must be HIPAA-compliant / offer a BAA —
+  owner to verify during vendor selection — blocks vendor choice
+- Assumption — Budget is "reasonable," no fixed ceiling
+
+## 6. Open and Deferred Items
+- Open — HIPAA/BAA verification — Owner — before vendor
+  selected — blocks Step 3 (adoption)
+- Open — Whether second dentist has veto on vendor choice —
+  Owner — before approval — blocks sign-off</div>
+      <p>The owner leaves the session having done real, honest work on scope — but the one question she actually needed answered (which vendor is safe to use) is exactly where the document stops.</p>
+    </div>
+
+    <div class="findings-label">Findings</div>
+
+    <div class="finding">
+      <span class="num">1</span>
+      <div class="body"><span class="cite">ASMP-Compact.md — First Response, §0 template</span>
+        <p>Process vocabulary ("Fit and Redirection Gate," "Scoping mechanism: ASMP Compact") is spoken aloud and permanently saved into the owner's reference document, with no instruction anywhere to translate it into plain language.</p></div>
+      <span class="badge mid">Friction</span>
+    </div>
+    <div class="finding">
+      <span class="num">2</span>
+      <div class="body"><span class="cite">ASMP-Compact.md §3 — Working States</span>
+        <p>The Confirmed / Assumption / Open / Deferred / Excluded taxonomy is used on the person with no scripted plain-language explanation. Quality depends entirely on ad hoc AI judgment in the moment, not on the protocol text.</p></div>
+      <span class="badge mid">Friction</span>
+    </div>
+    <div class="finding">
+      <span class="num">3</span>
+      <div class="body"><span class="cite">ASMP-Compact.md §5 — Verification Guardrail vs. §2.2</span>
+        <p>The one question with real stakes (is the vendor safe with patient data) correctly cannot be closed inside the chat — but the owner spent the session on scope ceremony around the easy 90% and leaves exactly where she started on the hard 10%.</p></div>
+      <span class="badge mid">Friction</span>
+    </div>
+    <div class="finding">
+      <span class="num">4</span>
+      <div class="body"><span class="cite">ASMP-Compact.md §2.2</span>
+        <p>"Several smaller signals may also justify redirection" has no worked threshold. An identical clinic project could plausibly over-trigger into Comprehensive or under-trigger and skip the privacy signal entirely, depending on which session runs it.</p></div>
+      <span class="badge mid">Friction</span>
+    </div>
+    <div class="finding">
+      <span class="num">5</span>
+      <div class="body"><span class="cite">ASMP-Compact.md §8, Step 5</span>
+        <p>Nothing instructs the AI to surface the handful of decisions that actually need the owner's eyes before requesting sign-off — a rushed skim can approve a document with load-bearing Open items still unresolved.</p></div>
+      <span class="badge mid">Friction</span>
+    </div>
+    <div class="finding">
+      <span class="num">6</span>
+      <div class="body"><span class="cite">ASMP-Compact.md §4, §8</span>
+        <p>No guidance anywhere for resuming after the owner closes the chat mid-session and returns a week later — the protocol assumes one continuous, attentive sitting.</p></div>
+      <span class="badge low">Cosmetic</span>
+    </div>
+    <div class="finding">
+      <span class="num">7</span>
+      <div class="body"><span class="cite">README.md — "How to run a protocol"</span>
+        <p>Nothing sets the expectation that ASMP produces a scoping document, not vendor research — an owner who wanted booking-tool help is handed a document whose next action is still "go pick a vendor."</p></div>
+      <span class="badge low">Cosmetic</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BUILDER ============ -->
+<section class="report" id="builder" style="--report-color:var(--builder)">
+  <div class="wrap">
+    <div class="report-head">
+      <span class="role-eyebrow">Builder</span>
+      <h2>Architecture &amp; Project-Specific Correctness</h2>
+    </div>
+    <p class="project-line">Project: legacy invoicing monolith → microservices · ASMP Comprehensive, Phases A–L + checkpoints</p>
+
+    <div class="verdict-block">
+      <div class="label">Verdict</div>
+      <p>ASMP Comprehensive can be started and narrated correctly by any AI agent — the phase sequence, gate logic, and final-synthesis contract are unambiguous, and the template mirrors §10.6 with zero drift. But the protocol's headline claim — that checkpoints make work "recoverable across sessions and agents" — is not actually buildable as specified: §10 says what a checkpoint must contain, never where it lives, in what parseable shape its "entry condition" is expressed, or how a second agent verifies persistence rather than trusting the first agent's say-so.</p>
+    </div>
+
+    <div class="trace">
+      <div class="label">Simulated trace</div>
+      <p>The Fit Gate routes the migration to Comprehensive unambiguously — finance exposure, tight system coupling, and migration risk are all named triggers in §4. Phases A–D were carried into a real <code>01-foundation.md</code>:</p>
+      <div class="excerpt">## Domain vocabulary (partial)
+| Term | Meaning | State |
+| "Reconciled" | paid amount == invoiced amount in ledger,
+  verified by nightly batch | Confirmed — Verified Fact
+  (checked against billing-core/docs/glossary.md, 2026-09-02) |
+| "Invoice service" | mechanism-shaped — boundary undefined |
+  Open — Decision, owner: backend lead, before Phase E |
+
+## Active assumptions
+- Working Assumption: Postgres logical replication sufficient
+  for cutover (confidence: Medium, untested at current volume)
+- Open — Decision: who owns "accountable sponsor" — named
+  informally in kickoff, never confirmed in writing</div>
+      <p>A <strong>fresh agent</strong>, given only the protocol text and this checkpoint, was told to resume. It had to invent, unprompted: where <code>02-boundary.md</code> should live relative to the first file (no directory convention exists); how to parse "resume at Phase E once the boundary decision is settled" into an actual next action (no structured entry-condition field exists); and how to confirm the checkpoint is actually durably saved rather than pasted text that will vanish again (§10.5's "verify it exists" has no method attached, and the fresh agent may not share the first agent's filesystem access at all).</p>
+      <p><code>scripts/check-repo-integrity.sh</code> was run directly: it passes cleanly, and the checks it does make (version consistency, template markers, placeholder hygiene, link resolution) are real and accurate — narrower than the README's summary sentence implies, but not misleading.</p>
+    </div>
+
+    <div class="findings-label">Findings</div>
+
+    <div class="finding">
+      <span class="num">1</span>
+      <div class="body"><span class="cite">ASMP-Comprehensive.md §10.4–10.5</span>
+        <p>No mandated checkpoint directory or manifest. Two agents on the same effort can each satisfy the letter of the protocol while writing to different paths, silently breaking the one property §10 exists to guarantee.</p></div>
+      <span class="badge high">Blocking</span>
+    </div>
+    <div class="finding">
+      <span class="num">3</span>
+      <div class="body"><span class="cite">ASMP-Comprehensive.md §10.4–10.5</span>
+        <p>"Verify that each checkpoint exists in the intended durable location" is unimplementable as written — no method is given for a resuming agent that may lack the writing agent's filesystem or tool access.</p></div>
+      <span class="badge high">Blocking</span>
+    </div>
+    <div class="finding">
+      <span class="num">4</span>
+      <div class="body"><span class="cite">ASMP-Comprehensive.md §10.1–10.3</span>
+        <p>No required machine-parseable "entry condition" schema — resumption fidelity depends entirely on how disciplined the prior agent's free prose happened to be.</p></div>
+      <span class="badge high">Blocking</span>
+    </div>
+    <div class="finding">
+      <span class="num">2</span>
+      <div class="body"><span class="cite">ASMP-Comprehensive.md §10.4</span>
+        <p>Checkpoints are "amendable" with no append-log or revision marker — after several team disputes and edits, a fresh agent sees only the final overwritten prose, contradicting the protocol's own traceability principle (§2.9).</p></div>
+      <span class="badge mid">Drift risk</span>
+    </div>
+    <div class="finding">
+      <span class="num">6</span>
+      <div class="body"><span class="cite">ASMP-Comprehensive.md §4.2, ASMP-Compact.md §2.4</span>
+        <p>A "model-selected redirection" isn't required to emit the standard section set — two agents redirecting the same project can produce structurally incomparable documents both labeled <code>IDEA-SCOPE.md</code>.</p></div>
+      <span class="badge mid">Drift risk</span>
+    </div>
+    <div class="finding">
+      <span class="num">7</span>
+      <div class="body"><span class="cite">ASMP-Comprehensive.md §10</span>
+        <p>No collision or namespacing guidance for concurrent initiatives in the same workspace — two unrelated efforts would produce identically named checkpoint files with no required disambiguation.</p></div>
+      <span class="badge mid">Drift risk</span>
+    </div>
+    <div class="finding">
+      <span class="num">5</span>
+      <div class="body"><span class="cite">examples/, CONTRIBUTING.md</span>
+        <p>Zero worked examples of the three checkpoint files exist anywhere in the repo — the only mechanism unique to Comprehensive, and the project's own 9-scenario test table never tests checkpoint persistence or fresh-agent resumption.</p></div>
+      <span class="badge low">Minor</span>
+    </div>
+    <div class="finding">
+      <span class="num">8</span>
+      <div class="body"><span class="cite">scripts/check-repo-integrity.sh; README.md line 97</span>
+        <p>The README's "absence of downstream-framework coupling" check only greps <code>protocols/</code> and <code>templates/</code> for the string "banka" — narrower coverage than the summary sentence implies, though not inaccurate about what it checks.</p></div>
+      <span class="badge low">Minor</span>
+    </div>
+    <div class="finding">
+      <span class="num">9</span>
+      <div class="body"><span class="cite">templates/comprehensive-scope-template.md vs. §10.6</span>
+        <p>Verified structurally identical today, headings and columns match exactly — the one seam that is fully sound, though only weakly enforced going forward by a shallow two-heading spot-check.</p></div>
+      <span class="badge low">Minor</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RISK OWNER ============ -->
+<section class="report" id="risk" style="--report-color:var(--risk)">
+  <div class="wrap">
+    <div class="report-head">
+      <span class="role-eyebrow">Risk Owner</span>
+      <h2>Security, Failure &amp; Recovery</h2>
+    </div>
+    <p class="project-line">Project: public benefits eligibility pre-screener · ASMP Comprehensive, adversarial run of Gates G/J</p>
+
+    <div class="verdict-block">
+      <div class="label">Verdict</div>
+      <p>As written, ASMP Comprehensive is not safe to rely on unattended or lightly supervised for consequential public-impact work. Every control — the Fit Gate, the verification regime, Gate G, Gate J, "do not call it final" — is a textual instruction to the same AI agent that is simultaneously conducting the interview, grading its own evidence, and writing its own gate log. There is no external actor, no independent check, and no tamper-evidence anywhere from intake to "Approved."</p>
+    </div>
+
+    <div class="trace">
+      <div class="label">Adversarial trace</div>
+      <p>Framed the project to minimize it: <em>"a checklist tool that flags applications — caseworkers make every final decision, it's really just a faster spreadsheet."</em> §4's "public impact or vulnerable populations" trigger does correctly catch this on a careful reading, but nothing forces the AI to apply it against a sponsor's own minimizing language — it is a judgment call made from inside the same conversation the sponsor is steering.</p>
+      <p>A plausible domain-model row a real session could produce, satisfying §8's letter while failing its spirit:</p>
+      <div class="excerpt">| Eligibility pre-screen score | Model output classifying
+  applicant as Likely Eligible / Needs Review / Likely
+  Ineligible | Confirmed — Verified Fact (Vendor validation
+  report: "94% concordance with caseworker determinations
+  on 2,400 historical cases," checked 2026-09-01) |</div>
+      <p>Named source, dated, tagged correctly — and yet the source is the vendor grading its own product, and "concordance with past caseworker determinations" silently launders any existing bias in human decisions into a "Verified Fact" about the new system. §8 requires the source be named and current; it does not require independence or scrutiny of what the claim actually measures.</p>
+      <p>Gate G was closed by recording "possible disparate impact on non-English speakers" as an <em>accepted risk</em> with an owner — technically satisfying the gate with no severity threshold. Gate J was closed with "Reviewer: County Counsel (pending)" logged as an ordinary open item rather than a hard block on approval.</p>
+    </div>
+
+    <div class="findings-label">Findings — failure scenario, and whether a control exists</div>
+
+    <div class="finding">
+      <span class="num">1</span>
+      <div class="body"><span class="cite">ASMP-Comprehensive.md §4</span>
+        <p>Fit Gate is gameable by sponsor framing; the trigger phrase exists in the text but nothing forces it to override minimizing language. No recovery if missed.</p></div>
+      <span class="badge high">No control</span>
+    </div>
+    <div class="finding">
+      <span class="num">9</span>
+      <div class="body"><span class="cite">Document Control field, §13, optional-adapters/banka-handoff.md</span>
+        <p>"Status: Approved" is an unenforced text field — no signature, hash, or gate-log validation separates it from Draft, and the Banka adapter treats it as authoritative without re-validating gate resolution. The largest single gap for irreversible downstream action.</p></div>
+      <span class="badge high">No control</span>
+    </div>
+    <div class="finding">
+      <span class="num">4</span>
+      <div class="body"><span class="cite">ASMP-Comprehensive.md §9, Gate J</span>
+        <p>An unrun mandated independent review can be logged as an ordinary Open item rather than a hard block — §13's blocking conditions don't explicitly name "unrun Gate J."</p></div>
+      <span class="badge high">No control</span>
+    </div>
+    <div class="finding">
+      <span class="num">3</span>
+      <div class="body"><span class="cite">ASMP-Comprehensive.md §9, Gate G</span>
+        <p>Gate G only requires a foreseeable harm be recorded, not resolved or thresholded — an accepted risk to a vulnerable population can pass the gate on the say-so of the same sponsor who wants to avoid scrutiny.</p></div>
+      <span class="badge high">No control</span>
+    </div>
+    <div class="finding">
+      <span class="num">5</span>
+      <div class="body"><span class="cite">ASMP-Comprehensive.md §10</span>
+        <p>No concurrency control — two sessions editing the same checkpoint file concurrently silently clobber each other, and the risk isn't even named (unlike checkpoint-loss, which is).</p></div>
+      <span class="badge high">No control</span>
+    </div>
+    <div class="finding">
+      <span class="num">2</span>
+      <div class="body"><span class="cite">ASMP-Comprehensive.md §8</span>
+        <p>Verification checks form (named source, date) not substance (independence, what the claim actually measures) — a vendor's self-graded accuracy report can clear the bar unchanged.</p></div>
+      <span class="badge mid">Advisory only</span>
+    </div>
+    <div class="finding">
+      <span class="num">6</span>
+      <div class="body"><span class="cite">ASMP-Comprehensive.md §10.4</span>
+        <p>Persistence is self-certified from inside a runtime that may itself be ephemeral — the failure mode is named, but no independent check (e.g. reopening in a fresh session) is required before proceeding.</p></div>
+      <span class="badge mid">Partial control</span>
+    </div>
+    <div class="finding">
+      <span class="num">7</span>
+      <div class="body"><span class="cite">ASMP-Comprehensive.md §10.4</span>
+        <p>The bottom of the persistence fallback ladder is trust-only — if even a copyable packet is lost after the person says "saved," there is no checksum or resumption test, and the residual risk is undisclosed.</p></div>
+      <span class="badge mid">No control</span>
+    </div>
+    <div class="finding">
+      <span class="num">8</span>
+      <div class="body"><span class="cite">ASMP-Comprehensive.md §9, Gate D</span>
+        <p>Gate D checks that Deferred items have a trigger at closing time, but nothing re-scans an Approved document later for triggers that have since expired — stale risk assumptions can persist indefinitely as if current.</p></div>
+      <span class="badge mid">No control</span>
+    </div>
+    <div class="finding">
+      <span class="num">10</span>
+      <div class="body"><span class="cite">Cross-cutting</span>
+        <p>The recurring pattern: every safeguard is phrased as self-instruction to the acting AI, with no external verifier anywhere able to catch a careless, rushed, or motivated-reasoning violation of its own rules.</p></div>
+      <span class="badge high">No control</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONSOLIDATION ============ -->
+<section class="consolidation" id="consolidation">
+  <div class="wrap">
+    <h2>Consolidation</h2>
+    <p class="narrow">Three sessions, three unrelated projects, three different jobs to protect — read together, the disagreements are as informative as the agreement.</p>
+
+    <div class="axis-group">
+      <div class="axis-group-label agree">Where they agree</div>
+
+      <div class="axis">
+        <h4>A. Every guardrail is self-applied by the same agent it's meant to constrain</h4>
+        <p>The Fit Gate, the verification regime, Gate G/J, and "do not call it final" are all instructions to the AI conducting the session — none has an external check. User found this as an un-scripted judgment call on the clinic's privacy signal; Builder found it in the unenforced "model-selected redirection" and self-certified persistence test; Risk Owner named it directly as the report's central pattern.</p>
+        <div class="who"><span class="u">User · #4</span><span class="b">Builder · #6, #3</span><span class="r">Risk · #1, #10</span></div>
+      </div>
+
+      <div class="axis">
+        <h4>B. Continuity across time is asserted, not engineered</h4>
+        <p>Mid-session interruption (User), cross-session/cross-agent checkpoint recovery (Builder), and checkpoint persistence under concurrent edits (Risk Owner) are the same underlying gap surfacing at three different scales — from "the owner closes the laptop" to "a fresh agent can't find the file" to "two sessions clobber each other."</p>
+        <div class="who"><span class="u">User · #6</span><span class="b">Builder · #1, #3, #4</span><span class="r">Risk · #5, #6, #7</span></div>
+      </div>
+
+      <div class="axis">
+        <h4>C. The Fit Gate's materiality threshold isn't repeatable</h4>
+        <p>User found no worked criterion behind "several smaller signals may justify redirection," making outcomes session-dependent even for a harmless project. Risk Owner then successfully game-tested the same softness with minimizing sponsor language on a harmful one.</p>
+        <div class="who"><span class="u">User · #4</span><span class="r">Risk · #1</span></div>
+      </div>
+    </div>
+
+    <div class="axis-group">
+      <div class="axis-group-label disagree">Where they disagree</div>
+
+      <div class="axis">
+        <h4>D. Overall severity tracks the project's stakes, not the protocol's quality</h4>
+        <p>User (Compact, reversible, low-stakes) found no blocking issues. Builder (Comprehensive, technical, multi-session) found the checkpoint mechanism structurally blocking. Risk Owner (Comprehensive, public-impact) called the whole thing unacceptable as-is. Read one way, this vindicates ASMP's own proportional-rigor thesis — low-stakes work survives its gaps fine. Read the other way, it means the extra Comprehensive-only machinery — the exact layer meant to carry the highest-consequence work — is precisely the layer all three found unenforced.</p>
+      </div>
+
+      <div class="axis">
+        <h4>E. The tag taxonomy is either fine or alienating, depending who's asked</h4>
+        <p>Builder verified the Confirmed / Assumption / Open register works cleanly in a technical context — protocol and template stay in exact sync, zero drift. User found the identical taxonomy unexplained and confusing for a lay clinic owner. ASMP-Comprehensive.md's own preamble claims the specialist should "adapt the depth and language of the process to the work" — nothing in the text actually adapts register complexity to audience sophistication, so this tension sits genuinely unresolved rather than reconciled.</p>
+      </div>
+
+      <div class="axis">
+        <h4>F. Builder is the one report with a clean positive finding</h4>
+        <p>Template/protocol synchronization and the integrity script's actual (if narrower-than-advertised) checks both hold up under direct verification — worth stating plainly so the audit doesn't read as uniformly negative. Part of the system is demonstrably sound today.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VERDICT ============ -->
+<section class="final" id="verdict">
+  <div class="wrap">
+    <div class="verdict-card">
+      <div class="control">
+        <span>Dry-run status: <b>Complete</b></span>
+        <span>Scoping mechanism: <b>ASMP Compact + Comprehensive</b></span>
+        <span>Reviewed by: <b>3 independent agents</b></span>
+      </div>
+      <div class="body">
+        <h2>Verdict</h2>
+        <p>ASMP is internally coherent and does what it says at the stakes level it names for itself — it is a well-designed cognitive discipline for a competent, honest facilitator and a competent, honest sponsor. The dry-run's real finding is that every one of its guardrails is self-applied by the same process it's supposed to constrain, and that gap is invisible at Compact scale, structurally blocking at Comprehensive's cross-session promise, and an active safety concern once the subject is public-impact and irreversible.</p>
+        <div class="tier-grid">
+          <div class="tier pass">
+            <div class="tier-status">Pass</div>
+            <h4>Compact, reversible work</h4>
+            <p>Produces a genuinely usable scope brief. Remaining issues are UX/language polish, not correctness.</p>
+          </div>
+          <div class="tier conditional">
+            <div class="tier-status">Conditional</div>
+            <h4>Comprehensive, multi-session technical work</h4>
+            <p>Needs a checkpoint storage location convention, a structured entry-condition schema, and an independent persistence check before its cross-agent recovery claim can be trusted.</p>
+          </div>
+          <div class="tier fail">
+            <div class="tier-status">Not safe as-is</div>
+            <h4>High-consequence, public-impact work</h4>
+            <p>Requires an external layer ASMP doesn't provide: hard-triggered fit rules, real independent sign-off on Gates G/J, and a non-self-authored approval record before "Approved" licenses anything.</p>
+          </div>
+        </div>
+      </div>
+      <div class="closing">
+        <p>Net reading: the dry-run confirms ASMP's own stated thesis — proportional rigor, scaled to consequence — while showing that the enforcement layer needed to make "Comprehensive" trustworthy at the top of its own declared range doesn't yet exist in the protocol text. That is a specific, addressable gap, not a scattered one: all three reviewers, working independently on unrelated projects, converged on the same root cause.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>ASMP dry-run · User, Builder, and Risk Owner perspectives run independently, consolidated without reconciling disagreement</footer>
+
+</body></html>
