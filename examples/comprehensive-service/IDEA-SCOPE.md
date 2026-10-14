@@ -3,6 +3,7 @@
 ## 0. Document Control
 - Status: Decision-ready
 - Scoping mechanism: ASMP Comprehensive
+- Operating surface: Durable
 - Primary direction: Evolving
 - Work shape: Service or customer experience (primary); process, operations, or organizational change (secondary)
 - Scope owner: Dr. Amara Okafor, Public Health Programs Director
@@ -179,8 +180,12 @@ Resident declines further doses: status moves to "declined — documented reason
 ## 17. Gate Log
 | Gate | Evidence used | Result | Change made |
 | --- | --- | --- | --- |
-| B — Real-example walkthrough | Sample homebound referral from Clinic C | Passed with offline logging requirement added | Added approach boundary |
-| G — Harm and exclusion | Privacy Officer consult | Passed with PIA update required | Added Phase 1 dependency |
+| Gate A: Evidence Coverage | 2024 retrospective memo and partner emails inspected | Passed | Tagged all claims to sources |
+| Gate B: Real Example Walkthrough | Sample homebound referral from Clinic C | Passed | Added offline logging approach boundary |
+| Gate C: Internal Consistency | Reconciled vocabulary with state registry standards | Passed | Settled "Completed series" definition |
+| Gate D: Open-Item Integrity | All open items have named owners (Data Team, Privacy Officer) | Passed | Confirmed validation triggers |
+| Gate E: Proportionality | Tailored service operations scope without software overhead | Passed | Verified balanced ceremony |
+| Gate G: Harm and exclusion | Privacy Officer consult | Passed | Mandated PIA update in Phase 1 |
 
 ## 18. Handoff
 - Receiving discipline or protocol: Service design and procurement (Phase 1), then program implementation
