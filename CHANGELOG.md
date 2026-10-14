@@ -4,11 +4,32 @@ All notable changes to this repository are documented here.
 
 Compact and Comprehensive share one repository release version.
 
-## [v0.2.0-draft] — 2026-09-05
+## [v0.2.0-draft] — 2026-10-11
 
-Explicit Operating Surface fit, and a structurally reduced ASMP Compact.
+Stepped progressive disclosure architecture, candidate integrations (C1–C12), and portable editions.
 
 ### Added
+
+- Stepped ingestion architecture for file-capable agent runtimes:
+  - Comprehensive: `protocols/comprehensive/ROUTER.md` plus progressive step files (`steps/00` through `steps/04`).
+  - Compact: `protocols/compact/ROUTER.md` for file-capable IDE execution.
+- Portable single-ingest editions for plain chat surfaces without file tools: `protocols/comprehensive/PORTABLE.md` and `protocols/compact/PORTABLE.md`.
+- Candidate improvements folded across the suite:
+  - C1: Anti-sycophancy posture with banned validation phrases and falsifiability rule.
+  - C2: One-question-at-a-time questioning discipline with evidence-grounded recommended answers.
+  - C3: Demand Reality evidence probe in Intake.
+  - C4: Scored Fit Gate rubric (6 dimensions scored 0–10, 70/40 thresholds).
+  - C5: Recorded track-selection rationale on the record.
+  - C6: Checkable step completion criteria ("done when checkable by looking, never by feeling").
+  - C7: Scope-to-evidence bidirectional traceability tags in Comprehensive.
+  - C8: The Splitting Rule for oversized initiatives in Boundary analysis.
+  - C9: Blocking completion gates with surgical failure repair returns.
+  - C10: Non-negotiable synthesis invariants baked into `IDEA-SCOPE.md`.
+  - C11: Governing Stranger-Agent Handoff Bar for synthesis verification.
+  - C12: Milestone close-out decision records in checkpoints and surviving summary in Section 15.
+- Single-file monoliths (`protocols/ASMP-Comprehensive.md` and `protocols/ASMP-Compact.md`) replaced with thin deprecation pointers to the stepped suite.
+- Scope verification tooling (`scripts/verify-scope.sh` and `scripts/verify_scope.py`): dual-runtime verification engine (Python 3 with POSIX Bash fallback) enforcing C10 invariants, gate resolution, placeholder hygiene, and canonical SHA-256 tamper-evident hash seals.
+- Test fixture suite (`tests/fixtures/`) with positive sealed scopes and negative invariant/placeholder/tamper rejection test cases.
 
 - Operating Surface classification (Durable / Degraded-Artifact / Degraded-Packet), determined at intake in both protocols' Fit and Redirection Gates
 - `Operating surface` field in Comprehensive's Document Control and output template

@@ -24,8 +24,27 @@ required_files=(
   "CONTRIBUTING.md"
   "protocols/ASMP-Compact.md"
   "protocols/ASMP-Comprehensive.md"
+  "protocols/compact/ROUTER.md"
+  "protocols/compact/PORTABLE.md"
+  "protocols/comprehensive/ROUTER.md"
+  "protocols/comprehensive/PORTABLE.md"
+  "protocols/comprehensive/steps/00-intake-and-fit.md"
+  "protocols/comprehensive/steps/01-foundation.md"
+  "protocols/comprehensive/steps/02-boundary.md"
+  "protocols/comprehensive/steps/03-readiness.md"
+  "protocols/comprehensive/steps/04-synthesis.md"
   "templates/compact-scope-template.md"
   "templates/comprehensive-scope-template.md"
+  "examples/comprehensive-service/01-foundation.md"
+  "examples/comprehensive-service/02-boundary.md"
+  "examples/comprehensive-service/03-readiness.md"
+  "tests/fixtures/valid-comprehensive.md"
+  "tests/fixtures/valid-compact.md"
+  "tests/fixtures/failing-missing-invariants.md"
+  "tests/fixtures/failing-unresolved-placeholders.md"
+  "tests/fixtures/failing-tampered-hash.md"
+  "scripts/verify-scope.sh"
+  "scripts/verify_scope.py"
   "optional-adapters/banka-handoff.md"
   "scripts/check-repo-integrity.sh"
 )
@@ -42,14 +61,22 @@ done
 expected_version="v0.2.0-draft"
 compact_version=$(sed -n 's/^\*\*Protocol version:\*\* \([^ ]*\).*/\1/p' protocols/ASMP-Compact.md | head -n1)
 comp_version=$(sed -n 's/^\*\*Protocol version:\*\* \([^ ]*\).*/\1/p' protocols/ASMP-Comprehensive.md | head -n1)
+compact_router_version=$(sed -n 's/^\*\*Protocol version:\*\* \([^ ]*\).*/\1/p' protocols/compact/ROUTER.md | head -n1)
+compact_portable_version=$(sed -n 's/^\*\*Protocol version:\*\* \([^ ]*\).*/\1/p' protocols/compact/PORTABLE.md | head -n1)
+comp_router_version=$(sed -n 's/^\*\*Protocol version:\*\* \([^ ]*\).*/\1/p' protocols/comprehensive/ROUTER.md | head -n1)
+comp_portable_version=$(sed -n 's/^\*\*Protocol version:\*\* \([^ ]*\).*/\1/p' protocols/comprehensive/PORTABLE.md | head -n1)
 compact_template_version=$(sed -n 's/.*(protocol version \([^ ]*\) .*/\1/p' templates/compact-scope-template.md | head -n1)
 comp_template_version=$(sed -n 's/.*(protocol version \([^ ]*\) .*/\1/p' templates/comprehensive-scope-template.md | head -n1)
 readme_version=$(sed -n 's/^\*\*Current version:\*\* \([^ ]*\).*/\1/p' README.md | head -n1)
 changelog_version=$(sed -n 's/^## \[\([^]]*\)\].*/\1/p' CHANGELOG.md | head -n1)
 
 version_declarations=(
-  "Compact protocol:$compact_version"
-  "Comprehensive protocol:$comp_version"
+  "Compact redirect protocol:$compact_version"
+  "Comprehensive redirect protocol:$comp_version"
+  "Compact Router:$compact_router_version"
+  "Compact Portable:$compact_portable_version"
+  "Comprehensive Router:$comp_router_version"
+  "Comprehensive Portable:$comp_portable_version"
   "Compact template:$compact_template_version"
   "Comprehensive template:$comp_template_version"
   "README:$readme_version"
@@ -141,11 +168,31 @@ else
   fail "comprehensive template missing Operating surface field"
 fi
 
-if grep -qF "Operating surface:" protocols/ASMP-Comprehensive.md; then
-  pass "ASMP-Comprehensive.md declares Operating surface field"
+if grep -qF "Operating surface:" protocols/comprehensive/PORTABLE.md; then
+  pass "Comprehensive PORTABLE declares Operating surface field"
 else
-  fail "ASMP-Comprehensive.md missing Operating surface field"
+  fail "Comprehensive PORTABLE missing Operating surface field"
 fi
+
+if grep -qF "Operating surface:" protocols/comprehensive/steps/04-synthesis.md; then
+  pass "Step 04 synthesis declares Operating surface field"
+else
+  fail "Step 04 synthesis missing Operating surface field"
+fi
+
+# --- C10 Synthesis Invariants presence ---
+c10_markers=(
+  "Out of scope (Mandatory Invariant — C10)"
+  "Assumptions (Mandatory Invariant — C10)"
+  "Next responsible action (Mandatory Invariant — C10)"
+)
+for marker in "${c10_markers[@]}"; do
+  if grep -qF "$marker" protocols/comprehensive/steps/04-synthesis.md; then
+    pass "synthesis step enforces C10 marker: $marker"
+  else
+    fail "synthesis step missing C10 marker: $marker"
+  fi
+done
 
 # --- Example placeholder hygiene ---
 placeholder_pattern='\[(Initiative Name|TBD|TODO|FIXME|INSERT)\]'
@@ -174,6 +221,37 @@ if [[ -f protocols/ASMP-Comprehensive.pdf ]]; then
   fail "tracked PDF found in protocols/ — prefer release attachments"
 else
   pass "no tracked PDF in protocols/ (release-attachment policy)"
+fi
+
+# --- ASMP Scope Verifier (Python and POSIX fallback test runs) ---
+while IFS= read -r -d '' file; do
+  if ./scripts/verify-scope.sh "$file" >/dev/null 2>&1; then
+    pass "scope verifier passed on example: $file"
+  else
+    fail "scope verifier failed on example: $file"
+  fi
+done < <(find examples -type f -name 'IDEA-SCOPE.md' -print0)
+
+for fixture in tests/fixtures/valid-comprehensive.md tests/fixtures/valid-compact.md; do
+  if ./scripts/verify-scope.sh --require-seal "$fixture" >/dev/null 2>&1; then
+    pass "scope verifier passed with seal on fixture: $fixture"
+  else
+    fail "scope verifier failed on fixture: $fixture"
+  fi
+done
+
+for neg in tests/fixtures/failing-*.md; do
+  if ! ./scripts/verify-scope.sh "$neg" >/dev/null 2>&1; then
+    pass "scope verifier correctly rejected invalid fixture: $neg"
+  else
+    fail "scope verifier erroneously passed invalid fixture: $neg"
+  fi
+done
+
+if ASMP_FORCE_BASH=1 ./scripts/verify-scope.sh --require-seal tests/fixtures/valid-compact.md >/dev/null 2>&1; then
+  pass "scope verifier POSIX bash fallback engine operational"
+else
+  fail "scope verifier POSIX bash fallback engine failed"
 fi
 
 echo

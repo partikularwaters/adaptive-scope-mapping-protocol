@@ -33,16 +33,17 @@ The result is not a build plan or a pitch deck. It is a durable scope artifact h
 
 Both protocols include a **Fit and Redirection Gate**. If the chosen protocol is mismatched, the specialist explains why and asks approval before redirecting. Compact does not silently become Comprehensive, and Comprehensive does not impose heavy process on contained work.
 
-This table addresses the work's own complexity. A second, independent factor is where the session is actually running: **ASMP Compact assumes a plain conversational surface with no persistent files** — it is deliberately sized and structured for that context. **ASMP Comprehensive assumes an agentic runtime that can durably read and write files across sessions** — a coding agent or an equivalent automation environment — because its checkpoint system in Section 10 depends on that capability. Running Comprehensive without durable file access degrades its cross-session recoverability guarantee rather than voiding it silently; see `ASMP-Comprehensive.md` §10.4 for how that degradation is disclosed.
+This table addresses the work's own complexity. A second, independent factor is where the session is actually running: **ASMP Compact assumes a plain conversational surface with no persistent files** — it is deliberately sized and structured for that context. **ASMP Comprehensive assumes an agentic runtime that can durably read and write files across sessions** — a coding agent or an equivalent automation environment — because its checkpoint system depends on that capability. Running Comprehensive without durable file access degrades its cross-session recoverability guarantee; the portable edition (`protocols/comprehensive/PORTABLE.md`) discloses that fallback explicitly.
 
 ## How to run a protocol
 
-1. Supply **`protocols/ASMP-Compact.md`** or **`protocols/ASMP-Comprehensive.md`** to your assistant (or read it yourself as facilitator).
-2. Provide existing material — notes, drafts, data, policies, screenshots, prior attempts.
-3. Answer focused questions. Challenge vague language; verify consequential external claims or label them Open/Assumption.
-4. Approve any redirection before switching rigor level.
-5. Review the resulting **`IDEA-SCOPE.md`**. Approve it or request corrections.
-6. Hand off to the receiving discipline or workflow named in the document.
+1. **For file-capable agent runtimes / IDEs:** Supply **`protocols/comprehensive/ROUTER.md`** or **`protocols/compact/ROUTER.md`** to your assistant (the router adopts the Specialist role and reads step files progressively as milestones complete).
+2. **For plain chat surfaces without file tools:** Copy and paste the single-ingest portable edition — **`protocols/comprehensive/PORTABLE.md`** or **`protocols/compact/PORTABLE.md`**.
+3. Provide existing material — notes, drafts, data, policies, screenshots, prior attempts.
+4. Answer focused questions one at a time. Challenge vague language; verify consequential external claims or label them Open/Assumption.
+5. Approve any redirection before switching rigor level.
+6. Review the resulting **`IDEA-SCOPE.md`**. Approve it or request corrections.
+7. Hand off to the receiving discipline or workflow named in the document.
 
 Templates in [`templates/`](templates/) mirror the protocol output contracts and introduce no extra requirements.
 
@@ -57,7 +58,9 @@ In both cases the artifact must stand alone: a reader who missed the conversatio
 ## Repository layout
 
 ```text
-protocols/           Canonical ASMP Compact and Comprehensive protocols
+protocols/           Canonical ASMP routers, step files, and portable single-ingest editions
+  compact/           Compact router and portable single-ingest
+  comprehensive/     Comprehensive router, progressive step files, and portable single-ingest
 templates/           Output templates synchronized with the protocols
 examples/            Sanitized, non-authoritative completed scopes
 optional-adapters/   Explicit opt-in compatibility passes (not part of normal ASMP)
@@ -90,10 +93,30 @@ These integrations are optional. **ASMP is complete without Banka or any other d
 - **Contributing:** See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 - **License:** [MIT](LICENSE)
 
+## Scope verification tool
+
+Validate any completed `IDEA-SCOPE.md` artifact against ASMP contracts, mandatory C10 invariants, gate resolution, placeholder hygiene, and tamper-evident SHA-256 seals:
+
+```bash
+# Validate a scope artifact
+bash scripts/verify-scope.sh path/to/IDEA-SCOPE.md
+
+# Compute and output canonical SHA-256 seal line for Document Control
+bash scripts/verify-scope.sh --seal path/to/IDEA-SCOPE.md
+
+# Apply seal directly into Document Control
+python3 scripts/verify_scope.py --apply-seal path/to/IDEA-SCOPE.md
+
+# Machine-readable JSON output for automated CI pipelines
+bash scripts/verify-scope.sh --json path/to/IDEA-SCOPE.md
+```
+
+The verifier runs via Python 3 standard library by default, automatically falling back to a self-contained POSIX Bash engine when Python is unavailable.
+
 ## Integrity checks
 
 ```bash
 bash scripts/check-repo-integrity.sh
 ```
 
-Run before releases. The script verifies required files, shared version consistency, template structural markers, absence of downstream-framework coupling in base artifacts, example placeholder hygiene, known legacy Banka rubric regression markers in the optional adapter, and link resolution. Semantic protocol/template coherence and example quality remain manual review responsibilities.
+Run before releases. The script verifies required files, shared version consistency, template structural markers, absence of downstream-framework coupling in base artifacts, example placeholder hygiene, known legacy Banka rubric regression markers in the optional adapter, link resolution, and runs the scope verifier across all repository examples and test fixtures. Semantic protocol/template coherence and example quality remain manual review responsibilities.
